@@ -36,8 +36,7 @@ typedef OnDrag = void Function();
 typedef OnItemBuild = Widget? Function(int, Widget);
 typedef OnVideoLoad = void Function(VideoPlayerController);
 typedef CustomViewBuilder = Widget Function();
-typedef OnSlideDown = void Function(DragUpdateDetails);
-typedef OnSlideStart = void Function(DragStartDetails);
+typedef OnSlideDown = void Function();
 typedef OnPause = Future<bool> Function();
 typedef OnResume = Future<bool> Function();
 typedef IndicatorWrapper = Widget Function(Widget child);
@@ -61,7 +60,6 @@ class StoryPresenter extends StatefulWidget {
     this.headerBuilder,
     this.footerBuilder,
     this.onSlideDown,
-    this.onSlideStart,
     this.onPause,
     this.onResume,
     this.indicatorWrapper,
@@ -102,9 +100,6 @@ class StoryPresenter extends StatefulWidget {
 
   /// Callback function triggered when user drag downs the storyview.
   final OnSlideDown? onSlideDown;
-
-  /// Callback function triggered when user starts drag downs the storyview.
-  final OnSlideStart? onSlideStart;
 
   /// Configuration and styling options for the story view indicator.
   final StoryViewIndicatorConfig? storyViewIndicatorConfig;
@@ -470,6 +465,8 @@ class _StoryPresenterState extends State<StoryPresenter>
   Widget _buildGestureAndContents(
       BuildContext context, int index, StoryItem item) {
     final width = MediaQuery.sizeOf(context).width;
+    double dragStartY = 0.0;
+    const double dragThreshold = 100.0;
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -499,8 +496,15 @@ class _StoryPresenterState extends State<StoryPresenter>
         final willUserHandle = await widget.onResume?.call() ?? false;
         if (!willUserHandle) _storyController.play();
       },
-      onVerticalDragStart: widget.onSlideStart?.call,
-      onVerticalDragUpdate: widget.onSlideDown?.call,
+      onVerticalDragStart: (details) {
+        dragStartY = details.globalPosition.dy;
+      },
+      onVerticalDragUpdate: (details) {
+        final dragDistance = details.globalPosition.dy - dragStartY;
+        if (dragDistance > dragThreshold) {
+          widget.onSlideDown?.call();
+        }
+      },
 
       //! content goes here
       child: _buildContent(context, index, item),

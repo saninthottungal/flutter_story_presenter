@@ -417,6 +417,7 @@ class _MyStoryViewState extends State<MyStoryView> {
             curve: Curves.decelerate);
         controller = StoryController();
       },
+      onSlideDown: Navigator.of(context).pop,
     );
   }
 }
