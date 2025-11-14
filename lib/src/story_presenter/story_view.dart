@@ -9,7 +9,6 @@ import '../models/story_view_indicator_config.dart';
 import '../controller/flutter_story_controller.dart';
 import '../story_presenter/image_story_view.dart';
 import '../story_presenter/video_story_view.dart';
-import '../story_presenter/web_story_view.dart';
 import '../story_presenter/text_story_view.dart';
 import '../utils/story_utils.dart';
 import 'package:video_player/video_player.dart';
@@ -403,20 +402,20 @@ class _StoryPresenterState extends State<StoryPresenter>
           },
         );
 
-      case StoryItemType.web:
-        return WebStoryView(
-          storyItem: item,
-          key: UniqueKey(),
-          onWebViewLoaded: (controller, loaded) {
-            if (loaded) {
-              _startStoryCountdown(item.duration);
-            }
-            item.webConfig?.onWebViewLoaded?.call(
-              controller,
-              loaded,
-            );
-          },
-        );
+      // case StoryItemType.web:
+      //   return WebStoryView(
+      //     storyItem: item,
+      //     key: UniqueKey(),
+      //     onWebViewLoaded: (controller, loaded) {
+      //       if (loaded) {
+      //         _startStoryCountdown(item.duration);
+      //       }
+      //       item.webConfig?.onWebViewLoaded?.call(
+      //         controller,
+      //         loaded,
+      //       );
+      //     },
+      //   );
 
       case StoryItemType.custom:
         return StoryCustomWidgetWrapper(
