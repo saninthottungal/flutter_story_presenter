@@ -395,7 +395,12 @@ class _MyStoryViewState extends State<MyStoryView> {
       },
       storyViewIndicatorConfig: storyViewIndicatorConfig,
       headerBuilder: (context, index) {
-        return ProfileView(storyModel: widget.storyModel);
+        return ProfileView(
+          storyModel: widget.storyModel,
+          onTap: () {
+            controller.pause();
+          },
+        );
       },
       onLeftTap: () async {
         /// do some work here
@@ -426,76 +431,81 @@ class ProfileView extends StatelessWidget {
   const ProfileView({
     super.key,
     required this.storyModel,
+    required this.onTap,
   });
 
   final StoryModel storyModel;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(1),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
-        child: Row(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                color: Colors.amber,
-                shape: BoxShape.circle,
-              ),
-              padding: const EdgeInsets.all(1),
-              child: ClipOval(
-                child: CachedNetworkImage(
-                  imageUrl: storyModel.userProfile,
-                  height: 35,
-                  width: 35,
-                  fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(1),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
+          child: Row(
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  color: Colors.amber,
+                  shape: BoxShape.circle,
+                ),
+                padding: const EdgeInsets.all(1),
+                child: ClipOval(
+                  child: CachedNetworkImage(
+                    imageUrl: storyModel.userProfile,
+                    height: 35,
+                    width: 35,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: Row(
-                children: [
-                  Flexible(
-                    child: Text(
-                      storyModel.userName,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        storyModel.userName,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  const Icon(
-                    Icons.verified,
-                    size: 15,
-                  ),
-                  const SizedBox(
-                    width: 3,
-                  ),
-                  const Text(
-                    '1d',
-                    style: TextStyle(color: Colors.white, fontSize: 10),
-                  )
-                ],
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    const Icon(
+                      Icons.verified,
+                      size: 15,
+                    ),
+                    const SizedBox(
+                      width: 3,
+                    ),
+                    const Text(
+                      '1d',
+                      style: TextStyle(color: Colors.white, fontSize: 10),
+                    )
+                  ],
+                ),
               ),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.more_horiz,
-                color: Colors.white,
-              ),
-            )
-          ],
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.more_horiz,
+                  color: Colors.white,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

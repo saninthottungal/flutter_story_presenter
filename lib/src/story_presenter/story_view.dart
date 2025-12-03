@@ -491,10 +491,7 @@ class _StoryPresenterState extends State<StoryPresenter>
         final willUserHandle = await widget.onResume?.call() ?? false;
         if (!willUserHandle) _storyController.play();
       },
-      onLongPressCancel: () async {
-        final willUserHandle = await widget.onResume?.call() ?? false;
-        if (!willUserHandle) _storyController.play();
-      },
+
       onVerticalDragStart: (details) {
         dragStartY = details.globalPosition.dy;
       },
